@@ -14,7 +14,7 @@ const MONGO_URL = process.env.MONGO_URL;
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/',userRoute)
+app.use('/api',userRoute)
 
 if (MONGO_URL) {
   connect(MONGO_URL)
