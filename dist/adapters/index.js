@@ -31,14 +31,16 @@ const mongoDB_1 = __importDefault(require("../frameworks/database/mongoDB"));
 const http_1 = __importDefault(require("http"));
 const dotenv = __importStar(require("dotenv"));
 const userRouter_1 = require("../frameworks/express/router/userRouter");
+const cors_1 = __importDefault(require("cors"));
 dotenv.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const port = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/', userRouter_1.userRoute);
+app.use('/api', userRouter_1.userRoute);
 if (MONGO_URL) {
     (0, mongoDB_1.default)(MONGO_URL)
         .then(() => {

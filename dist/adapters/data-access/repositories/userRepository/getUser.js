@@ -12,22 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userRegistrationUseCase_1 = __importDefault(require("../../../business/useCase/userUseCase/userRegistrationUseCase"));
-exports.default = {
-    isuserExist: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getUser = void 0;
+const userModel_1 = __importDefault(require("../../models/userModel"));
+exports.getUser = {
+    getUserWithMobile: ({ number }) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            res.json(yield userRegistrationUseCase_1.default.checkUserExist(req.body));
+            return yield userModel_1.default.findOne({ mobile: number });
         }
         catch (error) {
-            res.status(500).json({ error: error.message });
+            throw new Error(error.message);
         }
     }),
-    registerUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            return res.json(yield userRegistrationUseCase_1.default.registerUser(req.body));
-        }
-        catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    })
 };

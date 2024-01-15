@@ -9,17 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const getUser_1 = require("../../../adapters/data-access/repositories/userRepository/getUser");
 const saveUser_1 = require("../../../adapters/data-access/repositories/userRepository/saveUser");
 const errorHandling_1 = require("../../errors/errorHandling");
 exports.default = {
     registerUser: (data) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log(data);
             const savedUser = yield (0, saveUser_1.saveUser)(data);
-            return true;
+            const user = {
+                _id: savedUser._id,
+                firstName: savedUser.firstName,
+                lastName: savedUser.lastName,
+                mobile: savedUser.mobile
+            };
+            return user;
         }
         catch (error) {
             (0, errorHandling_1.handleError)(error);
+        }
+    }),
+    checkUserExist: (mobile) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const existingUser = yield getUser_1.getUser.getUserWithMobile(mobile);
+            if (existingUser) {
+                return existingUser;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (error) {
         }
     })
 };

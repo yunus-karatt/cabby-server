@@ -3,6 +3,7 @@ import connect from "../frameworks/database/mongoDB";
 import http from "http";
 import * as dotenv from "dotenv";
 import {userRoute} from "../frameworks/express/router/userRouter";
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
@@ -11,9 +12,9 @@ const server = http.createServer(app);
 const port = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-
 app.use('/api',userRoute)
 
 if (MONGO_URL) {
