@@ -3,3 +3,16 @@ export interface signupData {
   lastName: string;
   email: string;
 }
+
+
+
+declare global{
+  namespace NodeJS{
+    interface ProcessEnv{
+      PORT: string;
+      MONGO_URL: string;
+      JWT_SECRET: string;
+    }
+  }
+}
+export{}
