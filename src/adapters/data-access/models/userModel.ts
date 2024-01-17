@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export interface UserDocument extends Document {
   firstName: string;
   lastName: string;
-  mobile: number | null;
+  mobile: string | null;
   email: string;
   password?: string;
   isBlocked: boolean;

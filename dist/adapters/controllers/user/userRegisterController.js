@@ -24,10 +24,19 @@ exports.default = {
     }),
     registerUser: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            return res.json(yield userRegistrationUseCase_1.default.registerUser(req.body));
+            return res.json(yield userRegistrationUseCase_1.default.registerUser(req.body, res));
         }
         catch (error) {
             res.status(500).json({ error: error.message });
         }
-    })
+    }),
+    checkUserWithMail: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const { mail } = req.body;
+            res.json(yield userRegistrationUseCase_1.default.checkUserExistWithMail(mail));
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }),
 };

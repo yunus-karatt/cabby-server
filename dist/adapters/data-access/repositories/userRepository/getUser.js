@@ -23,4 +23,20 @@ exports.getUser = {
             throw new Error(error.message);
         }
     }),
+    getUserWithMail: (mail) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            return yield userModel_1.default.findOne({ email: mail });
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }),
+    getUserWithId: (id) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            return yield userModel_1.default.findOne({ _id: id });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    })
 };
