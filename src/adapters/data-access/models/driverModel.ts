@@ -1,4 +1,4 @@
-import  mongoose, { Document, Schema } from "mongoose";
+import  mongoose, { Document, ObjectId, Schema } from "mongoose";
 import bcrypt from 'bcrypt'
 
 export interface DriverDocument extends Document {
@@ -31,6 +31,7 @@ export interface DriverDocument extends Document {
     vehicleImage1: string;
     vehicleImage2: string;
   };
+  cabModel:ObjectId
 }
 
 const driverSchema:Schema<DriverDocument>=new Schema({
@@ -105,8 +106,11 @@ const driverSchema:Schema<DriverDocument>=new Schema({
    vehicleImage2:{
     type:String
    }
-  }
-
+  },
+  cabModel:{
+    type: Schema.Types.ObjectId,
+    ref: 'Cab',
+  },
 })
 
 driverSchema.pre<DriverDocument>("save", async function (next) {

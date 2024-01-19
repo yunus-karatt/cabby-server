@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import adminRegistrationUseCase from "../../../business/useCase/adminUserCase/adminRegistrationUseCase";
+import adminRegistrationUseCase from "../../../business/useCase/adminUseCase/adminAuthUseCase";
 
 
 export default {
