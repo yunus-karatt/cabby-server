@@ -8,5 +8,12 @@ export const getDriver={
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  getDriverByMail:async(mail:string)=>{
+    try {
+      return await Driver.findOne({email:mail})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }

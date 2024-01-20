@@ -14,7 +14,12 @@ export default {
   },
   isAdminExist: async (mobile: { mobile: string }) => {
     try {
-      const admin = await getAdmin.getAdminWithMobile(mobile);
+      const data = await getAdmin.getAdminWithMobile(mobile);
+      const admin={
+        name:data?.name,
+        mobile:data?.mobile,
+        id:data?._id
+      }
       return admin;
     } catch (error) {
       throw new Error((error as Error).message);

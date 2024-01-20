@@ -9,6 +9,7 @@ driverRoutes.post("/register",driverAuthController.registerController)
 driverRoutes.post("/loginwithmobile",driverAuthController.loginwithMobile)
 driverRoutes.post("/logout",driverAuthController.logout)
 driverRoutes.post("/vehicle-details",driverAuthController.registerVehicle)
+driverRoutes.post("/isexistbyemail",driverAuthController.getDriverByMail)
 
 // cab
 driverRoutes.get('/cabs',driverCabController.getCabs)

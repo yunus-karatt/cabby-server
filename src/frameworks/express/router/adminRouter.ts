@@ -1,6 +1,7 @@
 import express from "express";
 import adminAuthController from "../../../adapters/controllers/admin/adminAuthController";
 import adminCabController from "../../../adapters/controllers/admin/adminCabController";
+import adminUserManagementController from "../../../adapters/controllers/admin/adminUserManagementController";
 
 export const adminRoutes = express.Router();
 
@@ -15,3 +16,8 @@ adminRoutes
   .route("/cab")
   .post(adminCabController.addCab)
   .get(adminCabController.getCabs);
+
+// users
+
+adminRoutes.get('/getusers',adminUserManagementController.getUsers)
+adminRoutes.put("/blockuser/:id",adminUserManagementController.blockUser)

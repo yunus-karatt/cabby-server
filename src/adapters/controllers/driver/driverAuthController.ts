@@ -9,6 +9,14 @@ export default{
       throw new Error((error as Error).message)
     }
   },
+  getDriverByMail:async(req:Request,res:Response)=>{
+    
+    try {
+      res.json(await driverAuthUseCase.getDriverByMail(req.body))
+    } catch (error) {
+      res.status(400).json((error as Error).message)
+    }
+  },
   registerController:async(req:Request,res:Response)=>{
     try {
       res.json(await driverAuthUseCase.registerDriver(req.body))

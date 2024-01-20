@@ -21,5 +21,19 @@ export const getUser = {
     } catch (error) {
       console.log(error)
     }
+  },
+  getAllUserWithLimit:async(skip:number,limit:number)=>{
+    try {
+      return await User.find().skip((skip-1)*limit).limit(limit)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  getUserCount:async()=>{
+    try {
+      return await User.find().countDocuments()
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 };

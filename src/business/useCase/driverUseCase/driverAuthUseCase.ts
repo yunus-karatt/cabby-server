@@ -16,6 +16,7 @@ export default {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
+          mobile:driver.mobile
         };
         return driverData;
       } else {
@@ -25,6 +26,25 @@ export default {
       throw new Error((error as Error).message);
     }
   },
+  getDriverByMail:async({mail}:{mail:string})=>{
+    try {
+      const driver = await getDriver.getDriverByMail(mail);
+      if (driver) {
+        const driverData = {
+          firstName: driver.firstName,
+          lastName: driver.lastName,
+          id: driver._id,
+          mobile:driver.mobile
+        };
+        return driverData;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  }
+  ,
   registerDriver: async (data: signupData) => {
     try {
       const driver = await saveDriver.registerDriver(data);
