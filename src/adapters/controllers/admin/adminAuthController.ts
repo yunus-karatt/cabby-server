@@ -20,11 +20,12 @@ export default {
   loginWithMobile:async(req:Request,res:Response)=>{
     try {
       const {admin,token}=await adminRegistrationUseCase.loginWithMobile(req.body)
-      res.cookie("adminJWT", token, {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      });
-      res.json(admin)
+      // console.log({token}) 
+      // res.cookie("adminJWT", token, {
+      //   httpOnly: false,
+      //   maxAge: 30 * 24 * 60 * 60 * 1000
+      // });
+      res.json({admin,token}) 
     } catch (error) {
       throw new Error((error as Error).message)
     }

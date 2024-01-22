@@ -18,9 +18,9 @@ export interface DriverDocument extends Document {
     aadharId: string;
     aadharImage: string;
   };
-  license: {
-    licenseId: string;
-    licenseImage: string;
+  licence: {
+    licenceId: string;
+    licenceImage: string;
   };
   vehicleDocuments: {
     registration: {
@@ -31,7 +31,8 @@ export interface DriverDocument extends Document {
     vehicleImage1: string;
     vehicleImage2: string;
   };
-  cabModel:ObjectId
+  cabModel:ObjectId;
+  rejectionReason:string;
 }
 
 const driverSchema:Schema<DriverDocument>=new Schema({
@@ -82,11 +83,11 @@ const driverSchema:Schema<DriverDocument>=new Schema({
       type:String
     }
   },
-  license:{
-    licenseId:{
+  licence:{
+    licenceId:{
       type:String,
     },
-    licenseImage:{
+    licenceImage:{
       type:String
     }
 
@@ -111,6 +112,10 @@ const driverSchema:Schema<DriverDocument>=new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Cab',
   },
+  rejectionReason:{
+    type:String,
+    default:null
+  }
 })
 
 driverSchema.pre<DriverDocument>("save", async function (next) {

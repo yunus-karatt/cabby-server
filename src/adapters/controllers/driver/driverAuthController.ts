@@ -27,12 +27,12 @@ export default{
   },
   loginwithMobile:async (req:Request,res:Response)=>{
     try {
-      const {token,driverData}=await driverAuthUseCase.loginWithMobile(req.body)
-      res.cookie("driverJWT", token, {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      });
-      res.json(driverData)
+      res.json(await driverAuthUseCase.loginWithMobile(req.body))
+      // res.cookie("driverJWT", token, {
+      //   httpOnly: true,
+      //   maxAge: 30 * 24 * 60 * 60 * 1000,
+      // });
+      // res.json(driverData)
     } catch (error) {
       res.status(400).json((error as Error).message)
     }

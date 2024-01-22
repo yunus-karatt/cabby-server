@@ -10,5 +10,29 @@ export const updateDriver={
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  verifyDriver:async(_id:string)=>{
+    try {
+      return await Driver.findByIdAndUpdate(_id,{driverVerified:true})
+    } catch (error) {
+      throw new Error ((error as Error).message)
+    }
+  },
+  rejectDriver:async(_id:string,reason:string)=>{
+    try {
+      return await Driver.findByIdAndUpdate(_id,{driverVerified:false,rejectionReason:reason})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  blockDriver:async(_id:string)=>{
+    try {
+      const driver = await Driver.findById(_id);
+      if(!driver)
+      throw new Error("no user found")
+      return await Driver.findByIdAndUpdate(_id,{$set:{isBlocked:!driver.isBlocked}})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }

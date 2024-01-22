@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const protectUser=async(req:Request,res:Response,next:NextFunction)=>{
-  let token=req.header("Authorization");
-
+export const protectAdmin=async(req:Request<{}>,res:Response,next:NextFunction)=>{
+  let token=req.header('Authorization');
   if(token){
     try {
       const decoded=jwt.verify(token,process.env.JWT_SECRET);
@@ -18,4 +17,4 @@ export const protectUser=async(req:Request,res:Response,next:NextFunction)=>{
     throw new Error("Not authorized, no token")
   }
 }
- 
+   
