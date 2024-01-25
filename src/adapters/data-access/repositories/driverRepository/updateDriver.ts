@@ -34,5 +34,18 @@ export const updateDriver={
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  changeAvailability:async(_id:string)=>{
+    try {
+      const driver= await Driver.findById(_id)
+      if(driver){
+        driver.isAvailable=!driver.isAvailable
+        const result= await driver.save()
+        return result.isAvailable
+      }
+    } catch (error) {
+      console.log(error)
+      throw new Error((error as Error).message)
+    }
   }
 }

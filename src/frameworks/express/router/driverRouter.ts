@@ -1,6 +1,7 @@
 import express from 'express'
 import driverAuthController from '../../../adapters/controllers/driver/driverAuthController'
 import driverCabController from '../../../adapters/controllers/driver/driverCabController'
+import driverProfileController from '../../../adapters/controllers/driver/driverProfileController'
 
 export const driverRoutes=express.Router()
 // auth
@@ -13,3 +14,7 @@ driverRoutes.post("/isexistbyemail",driverAuthController.getDriverByMail)
 
 // cab
 driverRoutes.get('/cabs',driverCabController.getCabs)
+
+
+// go online
+driverRoutes.put('/set-availability',driverProfileController.changeAvailability)

@@ -41,5 +41,18 @@ export default {
     } catch (error) {
       throw new Error((error as Error).message)
     }
-  }
+  },
+  searchDriver:async (
+    req: Request<{ query: { search: string; page?: string } }>,
+    res: Response
+  ) => {
+    try {
+      const search = req.query.search as string;
+      const page: string | undefined = req.query.page as string;
+      const pageNumber = page ? parseInt(page) : 1;
+      res.json(await adminDriverUseCase.searchDriver(search, pageNumber));
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
 };

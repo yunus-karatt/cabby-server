@@ -19,5 +19,15 @@ export default{
       throw new Error((error as Error).message)
 
     }
+  },
+  searchUser:async(query:string,page:number)=>{
+    try {
+      const {user,count}=await getUser.getUserBySearch(query,page)
+      const totalPage=Math.ceil(count/10)
+      return {user,totalPage}
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+
   }
 }

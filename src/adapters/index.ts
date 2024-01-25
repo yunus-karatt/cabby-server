@@ -8,6 +8,7 @@ import cors from 'cors';
 import { errorHandler, notFound } from "../frameworks/express/middleware/errorMiddleware";
 import { adminRoutes } from "../frameworks/express/router/adminRouter";
 import cookieParser from 'cookie-parser';
+import { socketIOServer } from "../frameworks/socket/socket";
 
 
 dotenv.config();
@@ -29,7 +30,7 @@ app.use('/api/admin',adminRoutes)
 app.use(errorHandler)
 app.use(notFound)
 
-
+socketIOServer(server)
  
 
 if (MONGO_URL) {

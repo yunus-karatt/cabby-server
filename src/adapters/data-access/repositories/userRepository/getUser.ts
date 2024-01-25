@@ -35,5 +35,18 @@ export const getUser = {
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  getUserBySearch:async(query:string,page:number)=>{
+    try {
+      const regexQuery={$or:[
+        {firstName:{$regex:new RegExp(query,'i')}},
+        {lastName:{$regex:new RegExp(query,'i')}}
+      ]}
+      const count=await User.find(regexQuery).countDocuments()
+      const user=await User.find(regexQuery).skip((page-1)*10).limit(10)
+      return {count,user}
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 };

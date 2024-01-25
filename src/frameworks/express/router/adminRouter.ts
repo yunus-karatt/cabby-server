@@ -24,6 +24,7 @@ adminRoutes
 
 adminRoutes.get('/getusers',protectAdmin,adminUserManagementController.getUsers)
 adminRoutes.put("/blockuser/:id",protectAdmin,adminUserManagementController.blockUser)
+adminRoutes.get("/search-user",adminUserManagementController.searchUser)
 
 // Drivers
 adminRoutes.get('/driver-requests',protectAdmin,adminManageDriverController.getRequests)
@@ -31,3 +32,4 @@ adminRoutes.put("/verify-driver/:id",protectAdmin,adminManageDriverController.ve
 adminRoutes.post('/reject-driver',protectAdmin,adminManageDriverController.rejectDriver)
 adminRoutes.get("/get-drivers/",protectAdmin,adminManageDriverController.getDrivers)
 adminRoutes.put("/blockdriver/:id",protectAdmin,adminManageDriverController.blockDriver)   
+adminRoutes.get("/search-driver",adminManageDriverController.searchDriver)

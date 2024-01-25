@@ -40,5 +40,15 @@ export default{
       throw new Error((error as Error).message)
 
     }
+  },
+  searchDriver:async(query:string,page:number)=>{
+    try {
+      const {driver,count}=await getDriver.getDriverBySearch(query,page)
+      const totalPage=Math.ceil(count/10)
+      return {driver,totalPage}
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+
   }
 }

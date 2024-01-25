@@ -1,76 +1,123 @@
-import Driver from "../../models/driverModel"
+import Driver from "../../models/driverModel";
 
-export const getDriver={
-  getDriverByMobile:async({mobile}:{mobile:string})=>{
+export const getDriver = {
+  getDriverByMobile: async ({ mobile }: { mobile: string }) => {
     try {
+      return await Driver.findOne({ mobile });
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getDriverByMail: async (mail: string) => {
+    try {
+      return await Driver.findOne({ email: mail });
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getNotApprovedDrivers: async () => {
+    try {
+      return await Driver.aggregate([
+        {
+          $match: { driverVerified: false, rejectionReason: null },
+        },
+        {
+          $lookup: {
+            from: "cabs",
+            localField: "cabModel",
+            foreignField: "_id",
+            as: "cabModel",
+          },
+        },
+        {
+          $sort: { joinedAt: 1 },
+        },
+      ]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getAlldrivers: async (skip: number, limit: number) => {
+    try {
+      return await Driver.aggregate([
+        {
+          $match: { driverVerified: true },
+        },
+        {
+          $lookup: {
+            from: "cabs",
+            localField: "cabModel",
+            foreignField: "_id",
+            as: "cabModel",
+          },
+        },
+        {
+          $sort: { joinedAt: 1 },
+        },
+        {
+          $skip: (skip - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getDriverCount: async () => {
+    try {
+      return await Driver.find().countDocuments();
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getDriverBySearch: async (query: string, page: number) => {
+    try {
+      const regexQuery = {
+        $or: [
+          { firstName: { $regex: new RegExp(query, "i") } },
+          { lastName: { $regex: new RegExp(query, "i") } },
+        ],
+      };
+      const count = await Driver.find({
+        driverVerified: true,
+        $or: [
+          { firstName: { $regex: new RegExp(query, "i") } },
+          { lastName: { $regex: new RegExp(query, "i") } },
+        ],
+      }).countDocuments();
       
-      return await Driver.findOne({mobile})
+      const driver = await Driver.aggregate([
+        {
+          $match: { driverVerified: true ,
+            $or: [
+              { firstName: { $regex: new RegExp(query, "i") } },
+              { lastName: { $regex: new RegExp(query, "i") } },
+            ],
+          }
+        },
+        {
+          $lookup: {
+            from: "cabs",
+            localField: "cabModel",
+            foreignField: "_id",
+            as: "cabModel",
+          },
+        },
+        {
+          $sort: { joinedAt: 1 },
+        },
+        {
+          $skip: (page - 1) * 10,
+        },
+        {
+          $limit: 10,
+        },
+      ]);
+      return { driver, count };
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
   },
-  getDriverByMail:async(mail:string)=>{
-    try {
-      return await Driver.findOne({email:mail})
-    } catch (error) {
-      throw new Error((error as Error).message)
-    }
-  },
-  getNotApprovedDrivers:async()=>{
-    try {
-      return await Driver.aggregate([{
-        $match:{driverVerified:false,rejectionReason:null}
-      },
-      {
-        $lookup:{
-          from:"cabs",
-          localField:"cabModel",
-          foreignField:"_id",
-          as:"cabModel"
-        }
-      },
-      {
-        $sort:{joinedAt:1}
-      }
-    ])
-    // return await Driver.find({driverVerified:false}).populate("cabModel")
-    } catch (error) {
-      throw new Error((error as Error).message)
-    }
-  },
-  getAlldrivers:async(skip:number,limit:number)=>{
-    try {
-      // return await Driver.find({}).skip((skip-1)*limit).limit(limit)
-      return await Driver.aggregate([{
-        $match:{driverVerified:true}
-      },
-      {
-        $lookup:{
-          from:"cabs",
-          localField:"cabModel",
-          foreignField:"_id",
-          as:"cabModel"
-        }
-      },
-      {
-        $sort:{joinedAt:1}
-      },
-      {
-        $skip: (skip - 1) * limit
-      },
-      {
-        $limit: limit
-      }
-    ])
-    } catch (error) {
-      throw new Error((error as Error).message)
-    }
-  },
-  getDriverCount:async()=>{
-    try {
-      return await Driver.find().countDocuments()
-    } catch (error) {
-      throw new Error((error as Error).message)
-    }
-  }
-}
+};
