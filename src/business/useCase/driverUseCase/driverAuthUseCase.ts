@@ -16,7 +16,8 @@ export default {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
-          mobile:driver.mobile
+          mobile:driver.mobile,
+          cabModel:driver.cabModel
         };
         return driverData;
       } else {
@@ -63,6 +64,7 @@ export default {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
+          cabModel:driver.cabModel
         };
          token=generateToken(driver._id)
         }
