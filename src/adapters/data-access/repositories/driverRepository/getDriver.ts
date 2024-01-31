@@ -120,4 +120,11 @@ export const getDriver = {
       throw new Error((error as Error).message);
     }
   },
+  getDriverById:async(id:string)=>{
+    try {
+      return await Driver.findById(id)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
 };

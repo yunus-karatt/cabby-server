@@ -19,3 +19,23 @@ export interface DriverDetails {
   firstName?: string;
   lastName?: string;
 }
+
+export interface QuickRideInterface {
+  driverId?: string;
+  userId: string;
+  sourceCoordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  destinationCoordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  sourceLocation: string;
+  destinationLocation: string;
+  distance: number;
+  price: number;
+  feedback?: string;
+  rating?: number;
+  duration:number;
+}

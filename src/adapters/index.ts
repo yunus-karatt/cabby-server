@@ -9,7 +9,7 @@ import { errorHandler, notFound } from "../frameworks/express/middleware/errorMi
 import { adminRoutes } from "../frameworks/express/router/adminRouter";
 import cookieParser from 'cookie-parser';
 import { socketIOServer } from "../frameworks/socket/socket";
-
+import swaggerjsdoc from 'swagger-jsdoc'
 
 dotenv.config();
 const app = express();

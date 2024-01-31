@@ -1,5 +1,5 @@
-import  mongoose, { Document, ObjectId, Schema } from "mongoose";
-import bcrypt from 'bcrypt'
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 export interface DriverDocument extends Document {
   firstName: string;
@@ -31,92 +31,98 @@ export interface DriverDocument extends Document {
     vehicleImage1: string;
     vehicleImage2: string;
   };
-  cabModel:ObjectId;
-  rejectionReason:string;
+  cabModel: ObjectId;
+  rejectedRides: { rideId: string; reason: string }[];
 }
 
-const driverSchema:Schema<DriverDocument>=new Schema({
-  firstName:{
-    type:String,
-    required:true
+const driverSchema: Schema<DriverDocument> = new Schema({
+  firstName: {
+    type: String,
+    required: true,
   },
-  lastName:{
-    type:String,
-    required:true
+  lastName: {
+    type: String,
+    required: true,
   },
-  mobile:{
-    type:String,
-    default:null
+  mobile: {
+    type: String,
+    default: null,
   },
-  email:{
-    type:String,
-    required:true
+  email: {
+    type: String,
+    required: true,
   },
-  password:{
-    type:String
+  password: {
+    type: String,
   },
-  isBlocked:{
-    type:Boolean,
-    default:false
+  isBlocked: {
+    type: Boolean,
+    default: false,
   },
   joinedAt: {
     type: Date,
     default: Date.now,
   },
-  isAvailable:{
-    type:Boolean,
-    default:false,
+  isAvailable: {
+    type: Boolean,
+    default: false,
   },
-  isRiding:{
-    type:Boolean,
-    default:false
+  isRiding: {
+    type: Boolean,
+    default: false,
   },
-  driverVerified:{
-    type:Boolean,
-    default:false
+  driverVerified: {
+    type: Boolean,
+    default: false,
   },
-  aadhar:{
-    aadharId:{
-      type:String
+  aadhar: {
+    aadharId: {
+      type: String,
     },
-    aadharImage:{
-      type:String
-    }
-  },
-  licence:{
-    licenceId:{
-      type:String,
+    aadharImage: {
+      type: String,
     },
-    licenceImage:{
-      type:String
-    }
-
   },
-  vehicleDocuments:{
-    registration:{
-      registrationId:{
-        type:String
+  licence: {
+    licenceId: {
+      type: String,
+    },
+    licenceImage: {
+      type: String,
+    },
+  },
+  vehicleDocuments: {
+    registration: {
+      registrationId: {
+        type: String,
       },
-      registrationImage:{
-        type:String
-      }
+      registrationImage: {
+        type: String,
+      },
     },
-   vehicleImage1:{
-    type:String
-   },
-   vehicleImage2:{
-    type:String
-   }
+    vehicleImage1: {
+      type: String,
+    },
+    vehicleImage2: {
+      type: String,
+    },
   },
-  cabModel:{
+  cabModel: {
     type: Schema.Types.ObjectId,
-    ref: 'Cab',
+    ref: "Cab",
   },
-  rejectionReason:{
-    type:String,
-    default:null
-  }
-})
+  rejectedRides: [
+    {
+      rideId: {
+        type: Schema.Types.ObjectId,
+        ref: "QuickRide",
+      },
+      reason: {
+        type: String,
+      },
+    },
+  ],
+});
 
 driverSchema.pre<DriverDocument>("save", async function (next) {
   if (this.password) {

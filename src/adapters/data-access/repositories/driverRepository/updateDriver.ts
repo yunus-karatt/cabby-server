@@ -47,5 +47,19 @@ export const updateDriver={
       console.log(error)
       throw new Error((error as Error).message)
     }
+  },
+  postRejectionReason:async(driverId:string,rideId:string,reason:string)=>{
+    try {
+      return await Driver.findByIdAndUpdate(driverId,{$push:{rejectedRides:{rideId,reason}}})
+    } catch (error) {
+      throw new Error ((error as Error).message)
+    }
+  },
+  setOffline:async(driverId:string)=>{
+    try {
+      return await Driver.findByIdAndUpdate(driverId,{isAvailable:false})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }
