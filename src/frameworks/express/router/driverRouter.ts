@@ -6,6 +6,7 @@ import driverRideController from '../../../adapters/controllers/driver/driverRid
 import driverUserController from '../../../adapters/controllers/driver/driverUserController'
 
 export const driverRoutes=express.Router()
+
 // auth
 driverRoutes.post("/isexistbymobile",driverAuthController.getDriverByMobile)
 driverRoutes.post("/register",driverAuthController.registerController)

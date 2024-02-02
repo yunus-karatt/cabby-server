@@ -9,6 +9,7 @@ import { errorHandler, notFound } from "../frameworks/express/middleware/errorMi
 import { adminRoutes } from "../frameworks/express/router/adminRouter";
 import cookieParser from 'cookie-parser';
 import { socketIOServer } from "../frameworks/socket/socket";
+import swaggerUi from 'swagger-ui-express'
 import swaggerjsdoc from 'swagger-jsdoc'
 
 dotenv.config();
@@ -23,7 +24,16 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 
-  
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: "/swagger.json",
+    },
+  })
+);
+ 
 app.use('/api',userRoute)
 app.use('/api/driver',driverRoutes)
 app.use('/api/admin',adminRoutes)

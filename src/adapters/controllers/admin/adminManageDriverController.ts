@@ -9,40 +9,43 @@ export default {
       throw new Error((error as Error).message);
     }
   },
-  verifyDriver:async(req:Request,res:Response)=>{
+  verifyDriver: async (req: Request, res: Response) => {
     try {
-      const id=req.params.id
-      res.json(await adminDriverUseCase.verifyDriver(id))
+      const id = req.params.id;
+      res.json(await adminDriverUseCase.verifyDriver(id));
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
   },
-  rejectDriver:async(req:Request,res:Response)=>{
-    console.log(req.body)
+  rejectDriver: async (req: Request, res: Response) => {
+    console.log(req.body);
     try {
-      res.json(await adminDriverUseCase.rejectDriver(req.body))
+      res.json(await adminDriverUseCase.rejectDriver(req.body));
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
   },
-  getDrivers:async(req:Request<{query: {page?: string }}>,res:Response)=>{
+  getDrivers: async (
+    req: Request<{ query: { page?: string } }>,
+    res: Response
+  ) => {
     try {
-      const page: string | undefined = req.query.page?.toString() ?? '1';
-      const pageNumber = parseInt(page);     
-       res.json(await adminDriverUseCase.getDrivers(pageNumber))
+      const page: string | undefined = req.query.page?.toString() ?? "1";
+      const pageNumber = parseInt(page);
+      res.json(await adminDriverUseCase.getDrivers(pageNumber));
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
   },
-  blockDriver:async(req:Request,res:Response)=>{
+  blockDriver: async (req: Request, res: Response) => {
     try {
-      const id=req.params.id
-      res.json(await adminDriverUseCase.blockDriver(id))
+      const id = req.params.id;
+      res.json(await adminDriverUseCase.blockDriver(id));
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
   },
-  searchDriver:async (
+  searchDriver: async (
     req: Request<{ query: { search: string; page?: string } }>,
     res: Response
   ) => {

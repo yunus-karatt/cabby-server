@@ -34,7 +34,7 @@ export interface QuickRideInterface {
   sourceLocation: string;
   destinationLocation: string;
   distance: number;
-  price: number;
+  // price: number;
   feedback?: string;
   rating?: number;
   duration:number;
