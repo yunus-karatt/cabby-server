@@ -33,6 +33,7 @@ export interface DriverDocument extends Document {
   };
   cabModel: ObjectId;
   rejectedRides: { rideId: string; reason: string }[];
+  cancelledRides: { rideId: string; reason: string }[];
 }
 
 const driverSchema: Schema<DriverDocument> = new Schema({
@@ -112,6 +113,17 @@ const driverSchema: Schema<DriverDocument> = new Schema({
     ref: "Cab",
   },
   rejectedRides: [
+    {
+      rideId: {
+        type: Schema.Types.ObjectId,
+        ref: "QuickRide",
+      },
+      reason: {
+        type: String,
+      },
+    },
+  ],
+  cancelledRides: [
     {
       rideId: {
         type: Schema.Types.ObjectId,

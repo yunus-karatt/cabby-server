@@ -6,7 +6,6 @@ import { getQuickRide } from "../../adapters/data-access/repositories/quickRideR
 interface RideRequestData {
   source: { lat: number; long: number; placeName: string };
   destination: { lat: number; long: number; placeName: string };
-  // selectedCabId?: string;
   duration: string;
   distance: number;
   amount?: number;
@@ -50,7 +49,6 @@ export const socketIOServer = (server: any) => {
         sourceLocation: data.source.placeName,
         distance: data.distance,
         userId: data.userId,
-        // price: data.amount,
         duration: parseFloat(data.duration),
       };
 
@@ -63,7 +61,6 @@ export const socketIOServer = (server: any) => {
       io.emit("getDriverCoordinates", {
         lat: data.source.lat,
         long: data.source.long,
-        // cabId: data.selectedCabId,
         rideId: savedRide._id,
         duration: data.duration,
       });
@@ -78,7 +75,6 @@ export const socketIOServer = (server: any) => {
         rideId: string;
         duration: string;
       }) => {
-        console.log("driverDistance", { data });
         const available = await driverRideUsecase.getAvailableDrivers(
           data.driverId,
           parseFloat(data.duration)  
@@ -89,34 +85,32 @@ export const socketIOServer = (server: any) => {
             availableCabTypes[data.rideId] = new Set();
           availableCabTypes[data.rideId].add(data.cabId);
         }
-        console.log(availableCabTypes[data.rideId]);
-        io.emit("sendAvailableCabs", {cabId:[...availableCabTypes[data.rideId]],rideId:data.rideId});
-        // if (!nearestDrivers[data.rideId].initiated) {
-        //   nearestDrivers[data.rideId].initiated = true;
-        //   emitNearestDrivers(data.rideId);
-        // } 
+        io.emit("sendAvailableCabs", {cabId:[...availableCabTypes[data.rideId]||[]],rideId:data.rideId});
+        
       }
     );
-    socket.on("getRequestForRide", (data) => {
-      console.log("getRequestForRide", data);
+    socket.on("getRequestForRide", async(data) => {
+      console.log('socket getRequestForRide',data)
+      await driverRideUsecase.updateQuickRideData(data.rideId, {price:data.amount});
+
       nearestDrivers[data.rideId].drivers=nearestDrivers[data.rideId].drivers.filter(id=>id.cabId===data.selectedCabId)
-      console.log(nearestDrivers[data.rideId].drivers)
       if (!nearestDrivers[data.rideId].initiated) {
           nearestDrivers[data.rideId].initiated = true;
-          emitNearestDrivers(data.rideId); 
+          emitNearestDrivers(data.rideId);  
         }
     });
+
+
     const emitNearestDrivers = async (rideId: string) => {
       if (nearestDrivers[rideId].drivers.length > 0) {
         const driverId = nearestDrivers[rideId].drivers.shift();
         const rideData = await getQuickRide(rideId);
-        console.log({rideData})
         io.emit("getDriverConfirmation", { driverId:driverId?.driverId, rideData });
         nearestDrivers[rideId].timeoutId = setTimeout(() => {
           handleTimeout(rideId);
         }, 15000);
       } else {
-        console.log("no drivers left");
+        socket.emit("noDrivers")
       }
     }; 
 
@@ -135,8 +129,19 @@ export const socketIOServer = (server: any) => {
     });
 
     socket.on("approveRide", async (data: any) => {
+
       nearestDrivers = {};
+      const generateOTP = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      };
+      const otp=generateOTP()
+      data.otp=otp
+      console.log('socket update ride data',data)
       await driverRideUsecase.updateQuickRideData(data._id, data);
+      await driverRideUsecase.updateDriverStatus(data.driverId)
+      const rideData:any=await driverRideUsecase.getQuickRideDataWithDriverData(data._id)
+      rideData[0].driverCoordinates=data.driverCoordinates
+      io.emit('approvedRide',rideData)
     });
   });
 };

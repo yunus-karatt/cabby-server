@@ -1,17 +1,18 @@
 import { getDriver } from "../../../adapters/data-access/repositories/driverRepository/getDriver"
 import { updateDriver } from "../../../adapters/data-access/repositories/driverRepository/updateDriver"
-import { getQuickRide } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide"
+import { getQuickRide, getQuickRideWithDriver } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide"
 import { saveQuickRide } from "../../../adapters/data-access/repositories/quickRideRepository/saveQuickRide"
 import { updateQuickeRide } from "../../../adapters/data-access/repositories/quickRideRepository/updateQuickRise"
 import { QuickRideInterface } from "../../interfaces/driver"
 
 export default{
   getAvailableDrivers:async(id:string,duration:number)=>{
+    // console.log('driverid',id)
     const driver=await getDriver.getDriverById(id)
 
-    if(driver?.isRiding){
-      return false
-    }
+    // if(driver?.isRiding){
+    //   return false
+    // }
     if(!driver?.isAvailable){
       return false
     }
@@ -33,6 +34,7 @@ export default{
   },
   updateQuickRideData:async(id:string,data:any)=>{
     try {
+      
       return await updateQuickeRide(id,data)
     } catch (error) {
       throw new Error((error as Error).message)
@@ -48,6 +50,20 @@ export default{
   setOfflineUseCase:async(driverId:string)=>{
     try {
       return await updateDriver.setOffline(driverId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  updateDriverStatus:async(driverId:string)=>{
+    try {
+      return await updateDriver.setIsRiding(driverId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  getQuickRideDataWithDriverData:async(rideId:string)=>{
+    try {
+      return await getQuickRideWithDriver(rideId)
     } catch (error) {
       throw new Error((error as Error).message)
     }

@@ -2,10 +2,12 @@ import mongoose, { Schema } from "mongoose";
 
 const quickRideSchema: Schema = new Schema({
     driverId: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: "Driver",
     },
     userId: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: "User",
     },
     sourceCoordinates: {
         latitude:{
@@ -50,6 +52,9 @@ const quickRideSchema: Schema = new Schema({
         type:String,
     },
     rating:{
+        type:Number
+    },
+    otp:{
         type:Number
     }
 });
