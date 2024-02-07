@@ -25,7 +25,7 @@ driverRoutes.get('/go-offline',driverProfileController.setOfflineProfileControll
 
 // rides
 driverRoutes.post('/rejection-reason',driverRideController.postRejectionController)
-
+driverRoutes.post('/verify-ride-otp',driverRideController.verifyOtpContr)
 
 // User
 driverRoutes.get('/get-user/:id',driverUserController.getUserWithId)

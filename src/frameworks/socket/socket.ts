@@ -143,5 +143,9 @@ export const socketIOServer = (server: any) => {
       rideData[0].driverCoordinates=data.driverCoordinates
       io.emit('approvedRide',rideData)
     });
+ 
+    socket.on('cancelRideBydriver',(data:any)=>{
+      console.log({data})
+    })
   });
 };

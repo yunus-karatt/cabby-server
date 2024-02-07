@@ -1,6 +1,6 @@
 import { getDriver } from "../../../adapters/data-access/repositories/driverRepository/getDriver"
 import { updateDriver } from "../../../adapters/data-access/repositories/driverRepository/updateDriver"
-import { getQuickRide, getQuickRideWithDriver } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide"
+import { getQuickRide, getQuickRideWithDriver, isValidOTP } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide"
 import { saveQuickRide } from "../../../adapters/data-access/repositories/quickRideRepository/saveQuickRide"
 import { updateQuickeRide } from "../../../adapters/data-access/repositories/quickRideRepository/updateQuickRise"
 import { QuickRideInterface } from "../../interfaces/driver"
@@ -64,6 +64,13 @@ export default{
   getQuickRideDataWithDriverData:async(rideId:string)=>{
     try {
       return await getQuickRideWithDriver(rideId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  verifyOTPUseCase:async(rideId:string,OTP:number)=>{
+    try {
+      return await isValidOTP(rideId,OTP)
     } catch (error) {
       throw new Error((error as Error).message)
     }

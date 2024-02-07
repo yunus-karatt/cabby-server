@@ -8,5 +8,13 @@ export default{
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  verifyOtpContr:async(req:Request,res:Response)=>{
+    try {
+      const {rideId,OTP}=req.body
+      res.json(await driverRideUsecase.verifyOTPUseCase(rideId,OTP))
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }
