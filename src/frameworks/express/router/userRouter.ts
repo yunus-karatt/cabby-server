@@ -2,6 +2,7 @@ import express from 'express';
 
 import userAuth from '../../../adapters/controllers/user/userAuthController'
 import userCabController from '../../../adapters/controllers/user/userCabController';
+import userRideController from '../../../adapters/controllers/user/userRideController';
 
 export const userRoute=express.Router()
 
@@ -17,3 +18,11 @@ userRoute.post("/logout",userAuth.logoutController)
 
 // cabs
 userRoute.get("/list-cabs",userCabController.getCabs)
+
+// Ride
+userRoute.get('/getQuickRideData/:id',userRideController.getQuickRideData) 
+
+// payment
+userRoute.post('/payment',userRideController.payment)
+userRoute.post('/paymentCapture',userRideController.paymentCapture)
+userRoute.get('/getkey',userRideController.getKey)

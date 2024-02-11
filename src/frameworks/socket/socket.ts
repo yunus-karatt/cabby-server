@@ -4,8 +4,8 @@ import { QuickRideInterface } from "../../business/interfaces/driver";
 import { getQuickRide } from "../../adapters/data-access/repositories/quickRideRepository/getQuickRide";
 
 interface RideRequestData {
-  source: { lat: number; long: number; placeName: string };
-  destination: { lat: number; long: number; placeName: string };
+  source: { latitude: number; longitude: number; placeName: string };
+  destination: { latitude: number; longitude: number; placeName: string };
   duration: string;
   distance: number;
   amount?: number;
@@ -36,15 +36,16 @@ export const socketIOServer = (server: any) => {
     console.log("connected", socket.id);
 
     socket.on("getNearByDrivers", async (data: RideRequestData) => {
+
       const quickRideData: QuickRideInterface = {
         destinationCoordinates: {
-          latitude: data.destination.lat,
-          longitude: data.destination.long,
+          latitude: data.destination.latitude,
+          longitude: data.destination.longitude,
         },
         destinationLocation: data.destination.placeName,
         sourceCoordinates: {
-          latitude: data.source.lat,
-          longitude: data.source.long,
+          latitude: data.source.latitude,
+          longitude: data.source.longitude,
         },
         sourceLocation: data.source.placeName,
         distance: data.distance,
@@ -59,8 +60,8 @@ export const socketIOServer = (server: any) => {
       nearestDrivers[savedRide._id] = { drivers: [] };
 
       io.emit("getDriverCoordinates", {
-        lat: data.source.lat,
-        long: data.source.long,
+        latitude: data.source.latitude,
+        longitude: data.source.longitude,
         rideId: savedRide._id,
         duration: data.duration,
       });
@@ -75,6 +76,7 @@ export const socketIOServer = (server: any) => {
         rideId: string;
         duration: string;
       }) => {
+        console.log('driverDistance',{data})
         const available = await driverRideUsecase.getAvailableDrivers(
           data.driverId,
           parseFloat(data.duration)  
@@ -147,5 +149,20 @@ export const socketIOServer = (server: any) => {
     socket.on('cancelRideBydriver',(data:any)=>{
       console.log({data})
     })
+    socket.on('driverLiveLocation',(data)=>{
+      io.emit('updateDriverCoordsForDriver',data);
+    })
+    socket.on('driverReachedAtPickup',(data)=>{
+      io.emit('driverReached',data)
+    })
+    socket.on('otpVerified',(data:{ rideId: string; userId: string })=>{
+      io.emit('rideStarted',data)
+    })
+    socket.on('reachedDestination',(data)=>{
+      io.emit('reachedDestination',data);
+    })
+    socket.on("disconnect", () => {
+      console.log("disconnected", socket.id);
+    });
   });
 };
