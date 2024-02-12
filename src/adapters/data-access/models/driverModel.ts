@@ -34,6 +34,11 @@ export interface DriverDocument extends Document {
   cabModel: ObjectId;
   rejectedRides: { rideId: string; reason: string }[];
   cancelledRides: { rideId: string; reason: string }[];
+  cityData:{
+    placeName:string
+    latitude:number
+    longitude:number
+  }
 }
 
 const driverSchema: Schema<DriverDocument> = new Schema({
@@ -134,6 +139,17 @@ const driverSchema: Schema<DriverDocument> = new Schema({
       },
     },
   ],
+  cityData:{
+    placeName:{
+      type:String
+    },
+    latitude:{
+      type:Number
+    },
+    longitude:{
+      type:Number
+    }
+  }
 });
 
 driverSchema.pre<DriverDocument>("save", async function (next) {

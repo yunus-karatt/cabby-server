@@ -4,6 +4,7 @@ import driverCabController from '../../../adapters/controllers/driver/driverCabC
 import driverProfileController from '../../../adapters/controllers/driver/driverProfileController'
 import driverRideController from '../../../adapters/controllers/driver/driverRideController'
 import driverUserController from '../../../adapters/controllers/driver/driverUserController'
+import { protectDriver } from '../middleware/driverAuthMiddleware'
 
 export const driverRoutes=express.Router()
 
@@ -20,12 +21,12 @@ driverRoutes.get('/cabs',driverCabController.getCabs)
 
 
 // go online
-driverRoutes.put('/set-availability',driverProfileController.changeAvailability)
+driverRoutes.put('/set-availability',protectDriver,driverProfileController.changeAvailability)
 driverRoutes.get('/go-offline',driverProfileController.setOfflineProfileController)
 
 // rides
-driverRoutes.post('/rejection-reason',driverRideController.postRejectionController)
-driverRoutes.post('/verify-ride-otp',driverRideController.verifyOtpContr)
+driverRoutes.post('/rejection-reason',protectDriver,driverRideController.postRejectionController)
+driverRoutes.post('/verify-ride-otp',protectDriver,driverRideController.verifyOtpContr)
 
 // User
-driverRoutes.get('/get-user/:id',driverUserController.getUserWithId)
+driverRoutes.get('/get-user/:id',protectDriver,driverUserController.getUserWithId)

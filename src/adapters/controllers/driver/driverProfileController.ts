@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import driverProfileUsecase from "../../../business/useCase/driverUseCase/driverProfileUsecase";
 import driverRideUsecase from "../../../business/useCase/driverUseCase/driverRideUsecase";
 
 export default {
-  changeAvailability: async (req: Request, res: Response) => {
+  changeAvailability: async (req: Request, res: Response,next:NextFunction) => {
     try {
+      console.log(req.body.id)
       res.json(await driverProfileUsecase.changeAvailability(req.body.id));
     } catch (error) {
-      console.log(error);
-      throw new Error((error as Error).message);
+      next(error)
     }
   },
   setOfflineProfileController: async (
@@ -21,5 +21,5 @@ export default {
     } catch (error) {
       throw new Error((error as Error).message);
     }
-  },
+  }, 
 };

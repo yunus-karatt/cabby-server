@@ -2,6 +2,12 @@ export interface signupData {
   firstName: string;
   lastName: string;
   email: string;
+  cityData:{
+    placeName:string,
+    latitude:number,
+    longitude:number
+  }
+  mobile:string
 }
 
 

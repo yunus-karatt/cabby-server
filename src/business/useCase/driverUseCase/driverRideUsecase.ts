@@ -51,7 +51,7 @@ export default{
     try {
       return await updateDriver.setOffline(driverId)
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message) 
     }
   },
   updateDriverStatus:async(driverId:string)=>{

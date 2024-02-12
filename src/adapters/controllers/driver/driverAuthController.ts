@@ -19,6 +19,7 @@ export default {
   },
   registerController: async (req: Request, res: Response) => {
     try {
+      console.log(req.body)
       res.json(await driverAuthUseCase.registerDriver(req.body));
     } catch (error) {
       res.status(400).json((error as Error).message);
@@ -33,7 +34,6 @@ export default {
   },
   logout: async (req: Request<{id?:string}>, res: Response) => {
     const id:string= req.query.id as string;
-    console.log({ id });
       await driverRideUsecase.setOfflineUseCase(id); 
     
     res.status(200).json({ message: "driver logged out  " });

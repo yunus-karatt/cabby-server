@@ -57,6 +57,8 @@ export const socketIOServer = (server: any) => {
         quickRideData
       );
 
+    
+
       nearestDrivers[savedRide._id] = { drivers: [] };
 
       io.emit("getDriverCoordinates", {
@@ -67,6 +69,8 @@ export const socketIOServer = (server: any) => {
       });
     });
 
+
+
     socket.on(
       "driverDistance",
       async (data: {
@@ -76,7 +80,6 @@ export const socketIOServer = (server: any) => {
         rideId: string;
         duration: string;
       }) => {
-        console.log('driverDistance',{data})
         const available = await driverRideUsecase.getAvailableDrivers(
           data.driverId,
           parseFloat(data.duration)  
@@ -91,6 +94,7 @@ export const socketIOServer = (server: any) => {
         
       }
     );
+
     socket.on("getRequestForRide", async(data) => {
       console.log('socket getRequestForRide',data)
       await driverRideUsecase.updateQuickRideData(data.rideId, {price:data.amount});
@@ -145,6 +149,10 @@ export const socketIOServer = (server: any) => {
       rideData[0].driverCoordinates=data.driverCoordinates
       io.emit('approvedRide',rideData)
     });
+
+    socket.on('requestScheduledRide',(data)=>{
+      console.log('request scheduled ride',data)
+    })
  
     socket.on('cancelRideBydriver',(data:any)=>{
       console.log({data})

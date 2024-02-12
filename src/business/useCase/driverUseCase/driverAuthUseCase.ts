@@ -48,15 +48,25 @@ export default {
   ,
   registerDriver: async (data: signupData) => {
     try {
-      const driver = await saveDriver.registerDriver(data);
-      return driver;
+       const driver=await saveDriver.registerDriver(data);
+      if (driver) {
+        let driverData = {
+         firstName: driver.firstName,
+         lastName: driver.lastName,
+         id: driver._id,
+         cabModel:driver.cabModel,
+         mobile:driver.mobile
+       };
+      //  const token=generateToken(driver._id)
+      return driverData;
+      }
     } catch (error) {
       throw new Error((error as Error).message);
     }
   },
   loginWithMobile: async (mobile: { mobile: string }) => {
     try {
-      let driverData;
+      let driverData; 
       let token;
       const driver = await getDriver.getDriverByMobile(mobile);
       if (driver) {
@@ -76,7 +86,6 @@ export default {
   updateDriverDetails:async(data:DriverDetails)=>{
     try {
       const driverData= await updateDriver.updateDriverDetails(data)
-      console.log(driverData)
       return driverData
     } catch (error) {
       throw new Error((error as Error).message)

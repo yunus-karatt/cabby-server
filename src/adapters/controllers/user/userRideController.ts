@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import userQuickRideUseCase from "../../../business/useCase/userUseCase/userQuickRideUseCase";
 import paymentsUseCase from "../../../business/useCase/userUseCase/paymentsUseCase";
 
-export default {
+export default { 
   getQuickRideData: async (req: Request, res: Response) => {
     try {
       const id = req.params.id;

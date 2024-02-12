@@ -37,13 +37,12 @@ app.use(
 app.use('/api',userRoute)
 app.use('/api/driver',driverRoutes)
 app.use('/api/admin',adminRoutes)
-app.use(errorHandler)
-app.use(notFound)
+
 
 socketIOServer(server)
  
 
-if (MONGO_URL) {
+if (MONGO_URL) { 
   connect(MONGO_URL)
     .then(() => {
       server.listen(port, () => console.log(`Server Running on http://localhost:${port}`));
@@ -55,5 +54,7 @@ if (MONGO_URL) {
 } else {
   console.log("cannot access the URL from environment");
 }
+app.use(errorHandler)
+app.use(notFound)
 
 

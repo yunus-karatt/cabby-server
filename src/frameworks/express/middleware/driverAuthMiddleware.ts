@@ -8,13 +8,15 @@ export const protectDriver=async(req:Request,res:Response,next:NextFunction)=>{
       const decoded=jwt.verify(token,process.env.JWT_SECRET);
       next()
       // const user=await getUser.getUserWithId(decoded.userId)
-    } catch (error) {
+    } catch (err) {
       res.status(401);
-      throw new Error("Not authorized, invalid token")
+      const error= new Error("Not authorized, invalid token")
+      next(error)
     }
   }else{
     res.status(401)
-    throw new Error("Not authorized, no token")
+    const error= new Error("Not authorized, no token")
+    next(error)
   }
 }
    
