@@ -8,7 +8,6 @@ export const protectUser=async(req:Request,res:Response,next:NextFunction)=>{
     try {
       const decoded=jwt.verify(token,process.env.JWT_SECRET);
       next()
-      // const user=await getUser.getUserWithId(decoded.userId)
     } catch (error) {
       res.status(401);
       throw new Error("Not authorized, invalid token")

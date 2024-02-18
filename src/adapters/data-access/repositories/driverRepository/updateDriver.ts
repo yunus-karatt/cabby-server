@@ -67,5 +67,13 @@ export const updateDriver={
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  setIsRidingFalse:async(driverId:string)=>{
+    try {
+      console.log({driverId})
+      return await Driver.findByIdAndUpdate(driverId,{isRiding:false})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }

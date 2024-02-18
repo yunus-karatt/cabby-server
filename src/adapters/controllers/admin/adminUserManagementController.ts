@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import adminUserUsecase from "../../../business/useCase/adminUseCase/adminUserUsecase";
 
 export default {
   getUsers: async (
     req: Request<{ query: { page?: string } }>,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) => {
     try {
       const page: string | undefined =
@@ -12,7 +13,9 @@ export default {
       const pageNumber = page ? parseInt(page) : 1;
       res.json(await adminUserUsecase.getUsers(pageNumber));
     } catch (error) {
-      throw new Error((error as Error).message);
+      console.log(error)
+      next(error)
+      // throw new Error((error as Error).message);
     }
   },
   blockUser: async (req: Request, res: Response) => {

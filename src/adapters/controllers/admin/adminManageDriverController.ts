@@ -1,12 +1,13 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import adminDriverUseCase from "../../../business/useCase/adminUseCase/adminDriverUseCase";
 
 export default {
-  getRequests: async (req: Request, res: Response) => {
+  getRequests: async (req: Request, res: Response,next:NextFunction) => {
     try {
       res.json(await adminDriverUseCase.getDriverRequest());
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error)
+      // throw new Error((error as Error).message);
     }
   },
   verifyDriver: async (req: Request, res: Response) => {

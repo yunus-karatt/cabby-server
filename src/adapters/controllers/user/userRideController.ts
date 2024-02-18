@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import userQuickRideUseCase from "../../../business/useCase/userUseCase/userQuickRideUseCase";
 import paymentsUseCase from "../../../business/useCase/userUseCase/paymentsUseCase";
+import userScheduledRideUsecase from "../../../business/useCase/userUseCase/userScheduledRideUsecase";
 
 export default { 
   getQuickRideData: async (req: Request, res: Response) => {
@@ -14,8 +15,10 @@ export default {
   payment: async (req: Request, res: Response) => {
     try {
       const { amount, rideId } = req.body;
-      res.json(await paymentsUseCase.razorpayCreateOrder(amount, rideId));
+      const intAmount = Math.round(parseFloat(amount) * 100);      console.log({intAmount})
+      res.json(await paymentsUseCase.razorpayCreateOrder(intAmount, rideId));
     } catch (error) {
+      console.log(error)
       throw new Error((error as Error).message);
     }
   },
@@ -26,11 +29,9 @@ export default {
         req.body;
 
       const body = razorpay_order_id + "|" + razorpay_payment_id;
-
+ 
       const isAuthentic = await paymentsUseCase.paymentCapture(body,razorpay_signature);
-      if(isAuthentic){
-        res.redirect(process.env.CLIENT_BASE_URL)
-      }
+      res.json(isAuthentic)
 
     } catch (error) {
       throw new Error((error as Error).message);
@@ -43,4 +44,12 @@ export default {
       throw new Error((error as Error).message);
     }
   },
+  getScheduledRideByUserId:async (req:Request,res:Response,next:NextFunction)=>{
+    try {
+      const id=req.params.userId
+      res.json(await userScheduledRideUsecase.getScheduledRideByUserId(id))
+    } catch (error) {
+      next(error)
+    }
+  }
 };

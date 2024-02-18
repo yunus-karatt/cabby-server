@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUser = void 0;
 const userModel_1 = __importDefault(require("../../models/userModel"));
 exports.getUser = {
-    getUserWithMobile: ({ number }) => __awaiter(void 0, void 0, void 0, function* () {
+    getUserWithMobile: ({ mobile }) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            return yield userModel_1.default.findOne({ mobile: number });
+            return yield userModel_1.default.findOne({ mobile });
         }
         catch (error) {
             throw new Error(error.message);
@@ -37,6 +37,36 @@ exports.getUser = {
         }
         catch (error) {
             console.log(error);
+        }
+    }),
+    getAllUserWithLimit: (skip, limit) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            return yield userModel_1.default.find().skip((skip - 1) * limit).limit(limit);
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }),
+    getUserCount: () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            return yield userModel_1.default.find().countDocuments();
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    }),
+    getUserBySearch: (query, page) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const regexQuery = { $or: [
+                    { firstName: { $regex: new RegExp(query, 'i') } },
+                    { lastName: { $regex: new RegExp(query, 'i') } }
+                ] };
+            const count = yield userModel_1.default.find(regexQuery).countDocuments();
+            const user = yield userModel_1.default.find(regexQuery).skip((page - 1) * 10).limit(10);
+            return { count, user };
+        }
+        catch (error) {
+            throw new Error(error.message);
         }
     })
 };

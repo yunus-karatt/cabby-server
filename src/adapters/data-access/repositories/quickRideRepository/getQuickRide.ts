@@ -33,7 +33,6 @@ export const getQuickRideWithDriver = async (id: string) => {
         },
       },
     ]);
-    console.log("aggregation", { rideData });
     return rideData;
   } catch (error) {
     throw new Error((error as Error).message);

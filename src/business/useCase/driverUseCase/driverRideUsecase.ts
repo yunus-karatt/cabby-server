@@ -3,7 +3,10 @@ import { updateDriver } from "../../../adapters/data-access/repositories/driverR
 import { getQuickRide, getQuickRideWithDriver, isValidOTP } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide"
 import { saveQuickRide } from "../../../adapters/data-access/repositories/quickRideRepository/saveQuickRide"
 import { updateQuickeRide } from "../../../adapters/data-access/repositories/quickRideRepository/updateQuickRise"
-import { QuickRideInterface } from "../../interfaces/driver"
+import getScheduledRide from "../../../adapters/data-access/repositories/scheduledRideRepository/getScheduledRide"
+import { saveScheduledRide } from "../../../adapters/data-access/repositories/scheduledRideRepository/saveScheduledRide"
+import updateScheduledRide from "../../../adapters/data-access/repositories/scheduledRideRepository/updateScheduledRide"
+import { QuickRideInterface, ScheduledRideInterface } from "../../interfaces/driver"
 
 export default{
   getAvailableDrivers:async(id:string,duration:number)=>{
@@ -74,5 +77,69 @@ export default{
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  saveScheduledRide:async(data:ScheduledRideInterface)=>{
+    try {
+      return saveScheduledRide(data)
+    } catch (error) {
+     throw new Error((error as Error).message) 
+    }
+  },
+  getMatchedDriversForScheduledRide:async(rideData:any)=>{
+    try {
+      const drivers:any= await getDriver.getDriverForScheduledRide(rideData.sourceCoordinates,rideData.cabId)
+      const availableDrivers=[]
+      for(const driver of drivers){
+        const scheduledRides=await getScheduledRide.getSheduledRideByDriverId(driver._id)
+        const conflict=scheduledRides.some(scheduledRide=>{
+          const scheduledRideEndTime=new Date(scheduledRide.pichUpDate);
+          scheduledRideEndTime.setHours(scheduledRideEndTime.getHours()+scheduledRide.duration)
+
+          return scheduledRide.pickUpDate.getTime() === rideData.pickUpDate.getTime() ||
+          (scheduledRide.pickUpDate < rideData.pickUpDate &&
+          scheduledRideEndTime > rideData.pickUpDate &&
+          scheduledRideEndTime <= rideData.pickUpDate.getHours() + rideData.duration);          
+        })
+        if (!conflict) {
+          availableDrivers.push(driver);
+        }
+        return availableDrivers
+      }
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  updateScheduledRideWithDriver:async(rideId:string,driverId:string)=>{
+    try {
+      return await updateScheduledRide.updateWithDriverId(rideId,driverId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  listScheduledRides:async(driverId:string)=>{
+    try {
+     return await getScheduledRide.getDriversScheduledRide(driverId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  getScheduledRideByRideId:async(rideId:string)=>{
+    try {
+      return await getScheduledRide.getRideByRideId(rideId)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  generateScheduledRideOTP:async(rideId:string)=>{
+    try {
+      const generateOTP = () => {
+        return Math.floor(100000 + Math.random() * 900000);
+      };
+      const otp = generateOTP();
+      return await updateScheduledRide.updateOTP(rideId,otp)
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
+
 }

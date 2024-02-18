@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const quickRideSchema: Schema = new Schema({
+const scheduledRideSchema: Schema = new Schema({
     driverId: {
         type: Schema.Types.ObjectId,
         ref: "Driver",
@@ -59,9 +59,13 @@ const quickRideSchema: Schema = new Schema({
     },
     pickUpDate:{
       type:Date,
-    }
+    },
+    cabId:{
+        type: Schema.Types.ObjectId,
+        ref: "Cab",
+      },
 });
 
-const QuickRide = mongoose.model("QuickRide", quickRideSchema)
+const ScheduledRide = mongoose.model("ScheduledRide", scheduledRideSchema)
 
-export default QuickRide
+export default ScheduledRide

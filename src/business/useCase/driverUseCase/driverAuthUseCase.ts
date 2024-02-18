@@ -16,8 +16,8 @@ export default {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
-          mobile:driver.mobile,
-          cabModel:driver.cabModel
+          mobile: driver.mobile,
+          cabModel: driver.cabModel,
         };
         return driverData;
       } else {
@@ -27,7 +27,7 @@ export default {
       throw new Error((error as Error).message);
     }
   },
-  getDriverByMail:async({mail}:{mail:string})=>{
+  getDriverByMail: async ({ mail }: { mail: string }) => {
     try {
       const driver = await getDriver.getDriverByMail(mail);
       if (driver) {
@@ -35,7 +35,7 @@ export default {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
-          mobile:driver.mobile
+          mobile: driver.mobile,
         };
         return driverData;
       } else {
@@ -44,21 +44,29 @@ export default {
     } catch (error) {
       throw new Error((error as Error).message);
     }
-  }
-  ,
+  },
   registerDriver: async (data: signupData) => {
     try {
-       const driver=await saveDriver.registerDriver(data);
+      const driverData = {
+        ...data,
+        cityCoors: {
+          latitude: data.cityData.latitude,
+          longitude: data.cityData.longitude,
+          cityName: data.cityData.placeName,
+        },
+      };
+      console.log({driverData})
+      const driver = await saveDriver.registerDriver(driverData);
       if (driver) {
         let driverData = {
-         firstName: driver.firstName,
-         lastName: driver.lastName,
-         id: driver._id,
-         cabModel:driver.cabModel,
-         mobile:driver.mobile
-       };
-      //  const token=generateToken(driver._id)
-      return driverData;
+          firstName: driver.firstName,
+          lastName: driver.lastName,
+          id: driver._id,
+          cabModel: driver.cabModel,
+          mobile: driver.mobile,
+        };
+        //  const token=generateToken(driver._id)
+        return driverData;
       }
     } catch (error) {
       throw new Error((error as Error).message);
@@ -66,29 +74,29 @@ export default {
   },
   loginWithMobile: async (mobile: { mobile: string }) => {
     try {
-      let driverData; 
+      let driverData;
       let token;
       const driver = await getDriver.getDriverByMobile(mobile);
       if (driver) {
-         driverData = {
+        driverData = {
           firstName: driver.firstName,
           lastName: driver.lastName,
           id: driver._id,
-          cabModel:driver.cabModel
+          cabModel: driver.cabModel,
         };
-         token=generateToken(driver._id)
-        }
-        return {driverData,token};
+        token = generateToken(driver._id);
+      }
+      return { driverData, token };
     } catch (error) {
       throw new Error((error as Error).message);
     }
   },
-  updateDriverDetails:async(data:DriverDetails)=>{
+  updateDriverDetails: async (data: DriverDetails) => {
     try {
-      const driverData= await updateDriver.updateDriverDetails(data)
-      return driverData
+      const driverData = await updateDriver.updateDriverDetails(data);
+      return driverData;
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
-  }
+  },
 };

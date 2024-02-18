@@ -10,7 +10,7 @@ import { adminRoutes } from "../frameworks/express/router/adminRouter";
 import cookieParser from 'cookie-parser';
 import { socketIOServer } from "../frameworks/socket/socket";
 import swaggerUi from 'swagger-ui-express'
-import swaggerjsdoc from 'swagger-jsdoc'
+import { startReminderCronJob } from "../frameworks/croneJob/reminderCroneJob";
 
 dotenv.config();
 const app = express();
@@ -46,6 +46,7 @@ if (MONGO_URL) {
   connect(MONGO_URL)
     .then(() => {
       server.listen(port, () => console.log(`Server Running on http://localhost:${port}`));
+      startReminderCronJob()
     })
     .catch((error: Error) => {
       console.log(error);

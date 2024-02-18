@@ -27,6 +27,9 @@ driverRoutes.get('/go-offline',driverProfileController.setOfflineProfileControll
 // rides
 driverRoutes.post('/rejection-reason',protectDriver,driverRideController.postRejectionController)
 driverRoutes.post('/verify-ride-otp',protectDriver,driverRideController.verifyOtpContr)
+driverRoutes.get('/list-scheduledride/:id',protectDriver,driverRideController.listScheduledRides)
+driverRoutes.get('/get-scheduledride/:rideId',protectDriver,driverRideController.getScheduledRideByRideId)
+driverRoutes.post('/generate-scheduleride-otp/:rideId',protectDriver,driverRideController.generateScheduledRideOTP)
 
 // User
 driverRoutes.get('/get-user/:id',protectDriver,driverUserController.getUserWithId)

@@ -87,15 +87,16 @@ export const getDriver = {
           { lastName: { $regex: new RegExp(query, "i") } },
         ],
       }).countDocuments();
-      
+
       const driver = await Driver.aggregate([
         {
-          $match: { driverVerified: true ,
+          $match: {
+            driverVerified: true,
             $or: [
               { firstName: { $regex: new RegExp(query, "i") } },
               { lastName: { $regex: new RegExp(query, "i") } },
             ],
-          }
+          },
         },
         {
           $lookup: {
@@ -120,11 +121,36 @@ export const getDriver = {
       throw new Error((error as Error).message);
     }
   },
-  getDriverById:async(id:string)=>{
+  getDriverById: async (id: string) => {
     try {
-      return await Driver.findById(id)
+      return await Driver.findById(id);
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
-  }
+  },
+  getDriverForScheduledRide: async (pickupCoors: {
+    latitude: number;
+    longitude: number;
+  },cabId:string) => {
+    try {
+      const drivers =await Driver.find({
+        cityCoors: {
+          $nearSphere: {
+            $geometry: {
+              type: "Point",
+              coordinates: [pickupCoors.latitude, pickupCoors.longitude], // Coordinates from which you want to find drivers
+            },
+            $maxDistance: 5000, // 5 km in meters
+          },
+        },
+        isAvailable:true,
+        cabModel:cabId
+      },{_id:1}).exec();
+
+      return drivers
+      
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
 };

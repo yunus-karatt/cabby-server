@@ -22,6 +22,7 @@ userRoute.get("/list-cabs",protectUser,userCabController.getCabs)
 
 // Ride
 userRoute.get('/getQuickRideData/:id',protectUser,userRideController.getQuickRideData) 
+userRoute.get('/get-scheduledride/:userId',protectUser,userRideController.getScheduledRideByUserId)
 
 // payment
 userRoute.post('/payment',protectUser,userRideController.payment)

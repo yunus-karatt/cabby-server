@@ -34,11 +34,16 @@ export interface DriverDocument extends Document {
   cabModel: ObjectId;
   rejectedRides: { rideId: string; reason: string }[];
   cancelledRides: { rideId: string; reason: string }[];
-  cityData:{
-    placeName:string
-    latitude:number
+  // cityData:{
+  //   placeName:string
+  //   latitude:number
+  //   longitude:number
+  // }
+  cityCoors:{
+    latitude:number,
     longitude:number
-  }
+  };
+  cityName:string
 }
 
 const driverSchema: Schema<DriverDocument> = new Schema({
@@ -139,17 +144,29 @@ const driverSchema: Schema<DriverDocument> = new Schema({
       },
     },
   ],
-  cityData:{
-    placeName:{
-      type:String
-    },
+  // cityData:{
+  //   placeName:{
+  //     type:String
+  //   },
+  //   latitude:{
+  //     type:Number
+  //   },
+  //   longitude:{
+  //     type:Number
+  //   }
+  // }
+  cityCoors:{
     latitude:{
       type:Number
     },
     longitude:{
       type:Number
     }
+  },
+  cityName:{
+    type:String
   }
+
 });
 
 driverSchema.pre<DriverDocument>("save", async function (next) {
@@ -165,7 +182,7 @@ driverSchema.pre<DriverDocument>("save", async function (next) {
 driverSchema.methods.matchPassword = async function (enterdPassword: string) {
   return await bcrypt.compare(enterdPassword, this.password);
 };
-
+driverSchema.index({ "cityCoors": "2dsphere" });
 const Driver = mongoose.model("Driver", driverSchema);
 
 export default Driver;
