@@ -6,7 +6,7 @@ export const getQuickRide = async (id: string) => {
     return await QuickRide.findById(id);
   } catch (error) {
     throw new Error((error as Error).message);
-  }
+  } 
 };
 export const getQuickRideWithDriver = async (id: string) => {
   try {

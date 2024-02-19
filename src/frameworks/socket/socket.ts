@@ -176,8 +176,8 @@ export const socketIOServer = (server: any) => {
       io.emit("rideStarted", data);
     });
     socket.on("reachedDestination", async(data) => {
-      console.log(data);
-      await updateQuickRideStatus(data.rideId,'Ended')
+      console.log('reaced destination',data);
+      await updateQuickRideStatus(data.rideId,'Ended');
       console.log("driverid",data.driverId);
       await updateDriver.setIsRidingFalse(data.driverId)
       io.emit("reachedDestination", data);

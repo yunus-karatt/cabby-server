@@ -28,6 +28,15 @@ export interface ChatInterface {
   message: MessageInterface
 }
 
+export interface ReviewInterface{
+  rideId?: string
+  scheduledRideId?: string
+  userId: string
+  driverId:string
+  rating:number
+  review:string
+}
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {

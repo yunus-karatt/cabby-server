@@ -7,6 +7,7 @@ export default {
   getQuickRideData: async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
+      console.log({fromQuickRideDataId:id})
       res.json(await userQuickRideUseCase.getQuickRideData(id));
     } catch (error) {
       throw new Error((error as Error).message);
