@@ -5,6 +5,7 @@ import driverProfileController from '../../../adapters/controllers/driver/driver
 import driverRideController from '../../../adapters/controllers/driver/driverRideController'
 import driverUserController from '../../../adapters/controllers/driver/driverUserController'
 import { protectDriver } from '../middleware/driverAuthMiddleware'
+import driverDashboardController from '../../../adapters/controllers/driver/driverDashboardController'
 
 export const driverRoutes=express.Router()
 
@@ -33,3 +34,6 @@ driverRoutes.post('/generate-scheduleride-otp/:rideId',protectDriver,driverRideC
 
 // User
 driverRoutes.get('/get-user/:id',protectDriver,driverUserController.getUserWithId)
+
+// Dashboard
+driverRoutes.get('/get-dashboarddata/:driverId',protectDriver,driverDashboardController.getCompletedRideCount)

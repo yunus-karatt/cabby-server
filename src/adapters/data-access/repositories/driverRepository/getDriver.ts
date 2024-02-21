@@ -153,4 +153,13 @@ export const getDriver = {
       throw new Error((error as Error).message);
     }
   },
+  getRevenue:async(driverId:string)=>{
+    try {
+      const revenue= await Driver.findById(driverId,{revenue:1,_id:0})
+      console.log({revenue})
+      return revenue
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
 };

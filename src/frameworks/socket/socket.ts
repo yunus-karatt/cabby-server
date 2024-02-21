@@ -176,10 +176,10 @@ export const socketIOServer = (server: any) => {
       io.emit("rideStarted", data);
     });
     socket.on("reachedDestination", async(data) => {
-      console.log('reaced destination',data);
-      await updateQuickRideStatus(data.rideId,'Ended');
-      console.log("driverid",data.driverId);
-      await updateDriver.setIsRidingFalse(data.driverId)
+      if(!data.isScheduled)
+      await driverRideUsecase.updateDriverDataAfterRide(data.driverId,data.rideId,data.price)
+      
+
       io.emit("reachedDestination", data);
     });
     socket.on("disconnect", () => {

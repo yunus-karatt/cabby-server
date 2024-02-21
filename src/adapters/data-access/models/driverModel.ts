@@ -43,7 +43,8 @@ export interface DriverDocument extends Document {
     latitude:number,
     longitude:number
   };
-  cityName:string
+  cityName:string;
+  revenue:number
 }
 
 const driverSchema: Schema<DriverDocument> = new Schema({
@@ -86,6 +87,10 @@ const driverSchema: Schema<DriverDocument> = new Schema({
     type: Boolean,
     default: false,
   },
+  revenue: {
+    type: Number,
+    default: 0
+},
   aadhar: {
     aadharId: {
       type: String,

@@ -48,7 +48,7 @@ export default {
       return await ScheduledRide.aggregate([
         {
           $match: {
-            userId:new mongoose.Types.ObjectId(userId),
+            userId: new mongoose.Types.ObjectId(userId),
             pickUpDate: { $gt: currentDate },
           },
         },
@@ -72,6 +72,39 @@ export default {
           },
         },
       ]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getCompletedScheduledRideCount: async () => {
+    try {
+      const scheduledCount = await ScheduledRide.find({
+        status: "Ended",
+      }).countDocuments();
+      return scheduledCount;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getCompletedScheduledRideCountForDriver: async (driverId: string) => {
+    try {
+      const scheduledCount = await ScheduledRide.find({
+        driverId,
+        status: "Ended",
+      }).countDocuments();
+      return scheduledCount;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getUpcomingSchedulerRideCountForDriver: async (driverId: string) => {
+    try {
+      const currentDate = new Date();
+
+      return await ScheduledRide.find({
+        driverId,
+        pickUpDate: { $gt: currentDate }
+      }).countDocuments();
     } catch (error) {
       throw new Error((error as Error).message);
     }

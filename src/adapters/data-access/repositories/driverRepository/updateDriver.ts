@@ -75,5 +75,12 @@ export const updateDriver={
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  updateRevenue:async(driverId:string,amount:number)=>{
+    try {
+      return await Driver.findByIdAndUpdate(driverId,{$inc:{revenue:amount}})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }

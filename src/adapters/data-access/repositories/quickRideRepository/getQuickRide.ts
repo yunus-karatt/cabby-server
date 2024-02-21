@@ -6,7 +6,7 @@ export const getQuickRide = async (id: string) => {
     return await QuickRide.findById(id);
   } catch (error) {
     throw new Error((error as Error).message);
-  } 
+  }
 };
 export const getQuickRideWithDriver = async (id: string) => {
   try {
@@ -45,6 +45,53 @@ export const isValidOTP = async (rideId: string, OTP: number) => {
     if (rideData)
       if (rideData.otp === OTP) return true;
       else return false;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const completedRideCount = async () => {
+  try {
+    const count = await QuickRide.find({ status: "Ended" }).countDocuments();
+    return count;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+export const completedRideCountForDriver = async (driverId: string) => {
+  try {
+    const count = await QuickRide.find({
+      driverId,
+      status: "Ended",
+    }).countDocuments();
+    return count;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const getGraphData = async (driverId: string) => {
+  try {
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const data = await QuickRide.aggregate([
+      {
+        $match: {
+          driverId:new mongoose.Types.ObjectId(driverId),
+          date: { $gte: sevenDaysAgo, $lte: today },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, date: "$_id", count: 1 } }
+    ]);
+    return data;
   } catch (error) {
     throw new Error((error as Error).message);
   }
