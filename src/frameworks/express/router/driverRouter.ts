@@ -31,9 +31,11 @@ driverRoutes.post('/verify-ride-otp',protectDriver,driverRideController.verifyOt
 driverRoutes.get('/list-scheduledride/:id',protectDriver,driverRideController.listScheduledRides)
 driverRoutes.get('/get-scheduledride/:rideId',protectDriver,driverRideController.getScheduledRideByRideId)
 driverRoutes.post('/generate-scheduleride-otp/:rideId',protectDriver,driverRideController.generateScheduledRideOTP)
+driverRoutes.get('/get-ridehistory/:driverId',protectDriver,driverRideController.getAllRideHistoryByDriverId)
 
 // User
 driverRoutes.get('/get-user/:id',protectDriver,driverUserController.getUserWithId)
 
 // Dashboard
 driverRoutes.get('/get-dashboarddata/:driverId',protectDriver,driverDashboardController.getCompletedRideCount)
+driverRoutes.get('/get-review/:driverId',protectDriver,driverDashboardController.getReviewForDriver)

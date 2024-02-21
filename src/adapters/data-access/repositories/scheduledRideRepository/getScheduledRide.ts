@@ -109,4 +109,11 @@ export default {
       throw new Error((error as Error).message);
     }
   },
+  getScheduledRideHistoryForDriver:async(driverId:string)=>{
+    try {
+      return await ScheduledRide.find({driverId,status:"Ended"})
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
 };

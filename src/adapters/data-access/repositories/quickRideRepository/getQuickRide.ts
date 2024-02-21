@@ -96,3 +96,11 @@ export const getGraphData = async (driverId: string) => {
     throw new Error((error as Error).message);
   }
 };
+
+export const quickRideHistoryForDriver=async(driverId:string)=>{
+  try {
+    return await QuickRide.find({driverId,status:'Ended'})
+  } catch (error) {
+    throw new Error((error as Error).message)
+  }
+}

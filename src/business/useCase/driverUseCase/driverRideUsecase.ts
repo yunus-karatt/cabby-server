@@ -5,6 +5,7 @@ import {
   getQuickRide,
   getQuickRideWithDriver,
   isValidOTP,
+  quickRideHistoryForDriver,
 } from "../../../adapters/data-access/repositories/quickRideRepository/getQuickRide";
 import { saveQuickRide } from "../../../adapters/data-access/repositories/quickRideRepository/saveQuickRide";
 import {
@@ -186,4 +187,14 @@ export default {
       throw new Error((error as Error).message);
     }
   },
+  getAllHistoryByDriverId:async(driverId:string)=>{
+    try {
+      const quickRideData=await quickRideHistoryForDriver(driverId)
+      const scheduledRideData=await getScheduledRide.getScheduledRideHistoryForDriver(driverId)
+      console.log([...quickRideData,...scheduledRideData])
+      return [...quickRideData,...scheduledRideData]
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
 };

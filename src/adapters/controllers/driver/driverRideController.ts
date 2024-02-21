@@ -41,5 +41,13 @@ export default{
       next(error)
     }
   },
+  getAllRideHistoryByDriverId:async (req:Request,res:Response,next:NextFunction)=>{
+    try {
+      const id=req.params.driverId
+      res.json(await driverRideUsecase.getAllHistoryByDriverId(id))
+    } catch (error) {
+      next(error)
+    }
+  }
   
 } 

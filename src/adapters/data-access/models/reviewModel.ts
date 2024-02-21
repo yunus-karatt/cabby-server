@@ -13,18 +13,21 @@ const reviewSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  driverId:{
+  driverId: {
     type: Schema.Types.ObjectId,
-        ref: "Driver",
-  },  
-  rating:{
-    type:Number
+    ref: "Driver",
   },
-  review:{
-    type:String
-  }
-
+  rating: {
+    type: Number,
+  },
+  review: {
+    type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
-const Review=mongoose.model('Review',reviewSchema)
-export default Review
+const Review = mongoose.model("Review", reviewSchema);
+export default Review;
