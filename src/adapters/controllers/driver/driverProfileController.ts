@@ -22,4 +22,13 @@ export default {
       throw new Error((error as Error).message);
     }
   }, 
+  isOnline:async(req:Request,res:Response,next:NextFunction)=>{
+    try {
+      const id=req.params.id
+      
+      res.json(await driverRideUsecase.isOnline(id))
+    } catch (error) {
+      next(error)
+    }
+  }
 };

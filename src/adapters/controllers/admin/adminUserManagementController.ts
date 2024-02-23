@@ -5,7 +5,7 @@ export default {
   getUsers: async (
     req: Request<{ query: { page?: string } }>,
     res: Response,
-    next:NextFunction
+    next: NextFunction
   ) => {
     try {
       const page: string | undefined =
@@ -13,22 +13,22 @@ export default {
       const pageNumber = page ? parseInt(page) : 1;
       res.json(await adminUserUsecase.getUsers(pageNumber));
     } catch (error) {
-      console.log(error)
-      next(error)
+      next(error);
       // throw new Error((error as Error).message);
     }
   },
-  blockUser: async (req: Request, res: Response) => {
+  blockUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       res.json(await adminUserUsecase.blockUser(id));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
   searchUser: async (
     req: Request<{ query: { search: string; page?: string } }>,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) => {
     try {
       const search = req.query.search as string;
@@ -36,7 +36,7 @@ export default {
       const pageNumber = page ? parseInt(page) : 1;
       res.json(await adminUserUsecase.searchUser(search, pageNumber));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
 };

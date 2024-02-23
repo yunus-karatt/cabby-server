@@ -40,6 +40,18 @@ export default {
       throw new Error((error as Error).message);
     }
   },
+  getAllScheduledRide: async () => {
+    try {
+      const currentDate = new Date();
+      return await ScheduledRide.find({
+        pickUpDate: { $gt: currentDate },
+      })
+        .populate("driverId")
+        .populate("userId");
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
   getScheduledRideByUserid: async (userId: string) => {
     try {
       const currentDate = new Date();
@@ -103,17 +115,77 @@ export default {
 
       return await ScheduledRide.find({
         driverId,
-        pickUpDate: { $gt: currentDate }
+        pickUpDate: { $gt: currentDate },
       }).countDocuments();
     } catch (error) {
       throw new Error((error as Error).message);
     }
   },
-  getScheduledRideHistoryForDriver:async(driverId:string)=>{
+  getScheduledRideHistoryForDriver: async (driverId: string) => {
     try {
-      return await ScheduledRide.find({driverId,status:"Ended"})
+      return await ScheduledRide.find({ driverId, status: "Ended" });
     } catch (error) {
-      throw new Error((error as Error).message)
+      throw new Error((error as Error).message);
     }
-  }
+  },
+  getCancelledRide: async () => {
+    try {
+      return await ScheduledRide.find({ status: "Cancelled" }).countDocuments();
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getTotalRevenue: async () => {
+    try {
+      return await ScheduledRide.aggregate([
+        {
+          $match: {
+            status: "Ended",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            revnue: { $sum: "$price" },
+          },
+        },
+      ]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getScheduledRideHistoryForAdmin: async () => {
+    try {
+      return await ScheduledRide.find({ status: "Ended" });
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
+  getScheduledRideGraphForAdmin: async () => {
+    try {
+      const today = new Date();
+      const sevenDaysAgo = new Date(today);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const data = await ScheduledRide.aggregate([
+        {
+          $match: {
+            date: { $gte: sevenDaysAgo, $lte: today },
+            status: "Ended",
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$pickUpDate" } },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+        { $project: { _id: 0, date: "$_id", count: 1 } },
+      ]);
+
+      return data
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  },
 };

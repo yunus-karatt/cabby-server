@@ -15,7 +15,7 @@ export default {
       const rideCount = await completedRideCountForDriver(driverId);
       const upcomingScheduledRide =
         await getScheduledRide.getUpcomingSchedulerRideCountForDriver(driverId);
-      const { revenue } = (await getDriver.getRevenue(driverId)) ?? {};
+      let { revenue } = (await getDriver.getRevenue(driverId)) ?? {};
       const quickRideGraphData = await getGraphData(driverId);
       return {
         completedRide: scheduledCount + rideCount,

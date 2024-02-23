@@ -24,6 +24,7 @@ driverRoutes.get('/cabs',driverCabController.getCabs)
 // go online
 driverRoutes.put('/set-availability',protectDriver,driverProfileController.changeAvailability)
 driverRoutes.get('/go-offline',driverProfileController.setOfflineProfileController)
+driverRoutes.get('/is-driver-online/:id',protectDriver,driverProfileController.isOnline)
 
 // rides
 driverRoutes.post('/rejection-reason',protectDriver,driverRideController.postRejectionController)

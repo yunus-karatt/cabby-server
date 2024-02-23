@@ -10,11 +10,11 @@ export const protectAdmin=async(req:Request<{}>,res:Response,next:NextFunction)=
       // const user=await getUser.getUserWithId(decoded.userId)
     } catch (error) {
       res.status(401);
-      throw new Error("Not authorized, invalid token")
+      res.json("Not authorized, invalid token")
     }
   }else{
     res.status(401)
-    throw new Error("Not authorized, no token")
+    res.json("Not authorized, no token")
   }
 }
    

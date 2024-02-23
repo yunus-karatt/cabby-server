@@ -2,53 +2,54 @@ import { NextFunction, Request, Response } from "express";
 import adminDriverUseCase from "../../../business/useCase/adminUseCase/adminDriverUseCase";
 
 export default {
-  getRequests: async (req: Request, res: Response,next:NextFunction) => {
+  getRequests: async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json(await adminDriverUseCase.getDriverRequest());
     } catch (error) {
-      next(error)
-      // throw new Error((error as Error).message);
+      next(error);
     }
   },
-  verifyDriver: async (req: Request, res: Response) => {
+  verifyDriver: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       res.json(await adminDriverUseCase.verifyDriver(id));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
-  rejectDriver: async (req: Request, res: Response) => {
+  rejectDriver: async (req: Request, res: Response, next: NextFunction) => {
     console.log(req.body);
     try {
       res.json(await adminDriverUseCase.rejectDriver(req.body));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
   getDrivers: async (
     req: Request<{ query: { page?: string } }>,
-    res: Response
+    res: Response,
+    next:NextFunction
   ) => {
     try {
       const page: string | undefined = req.query.page?.toString() ?? "1";
       const pageNumber = parseInt(page);
       res.json(await adminDriverUseCase.getDrivers(pageNumber));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
-  blockDriver: async (req: Request, res: Response) => {
+  blockDriver: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id;
       res.json(await adminDriverUseCase.blockDriver(id));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
   searchDriver: async (
     req: Request<{ query: { search: string; page?: string } }>,
-    res: Response
+    res: Response,
+    next: NextFunction
   ) => {
     try {
       const search = req.query.search as string;
@@ -56,7 +57,7 @@ export default {
       const pageNumber = page ? parseInt(page) : 1;
       res.json(await adminDriverUseCase.searchDriver(search, pageNumber));
     } catch (error) {
-      throw new Error((error as Error).message);
+      next(error);
     }
   },
 };

@@ -1,20 +1,20 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import adminCabUseCase from "../../../business/useCase/cabUseCase/adminCabUseCase";
 
 
 export default{
-  addCab:async(req:Request,res:Response)=>{
+  addCab:async(req:Request,res:Response,next:NextFunction)=>{
     try {
       res.json(await adminCabUseCase.addCabUsecase(req.body))
     } catch (error) {
-      res.status(400).json((error as Error).message)
+      next(error)
     }
   },
-  getCabs:async(req:Request,res:Response)=>{
+  getCabs:async(req:Request,res:Response,next:NextFunction)=>{
     try {
       res.json(await adminCabUseCase.getCabsUsecase())
     } catch (error) {
-      res.status(400).json((error as Error).message)
+      next(error)
     }
   }
 }

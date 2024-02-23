@@ -104,3 +104,61 @@ export const quickRideHistoryForDriver=async(driverId:string)=>{
     throw new Error((error as Error).message)
   }
 }
+export const getCancelledRideCounts=async()=>{
+  try {
+    return await QuickRide.find({status:'Cancelled'}).countDocuments()
+  } catch (error) {
+    throw new Error((error as Error).message)
+  }
+}
+
+export const getTotalRevenue=async () => {
+  try {
+    return await QuickRide.aggregate([
+      {
+        $match:{status:'Ended'}
+      },
+      {
+        $group:{_id:null,revenue:{$sum:'$price'}}
+      }
+    ])
+  } catch (error) {
+    throw new Error((error as Error).message)
+  }
+  
+}
+
+export const getAdminGraphData = async () => {
+  try {
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const data = await QuickRide.aggregate([
+      {
+        $match: {
+          date: { $gte: sevenDaysAgo, $lte: today },
+          status:'Ended'
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, date: "$_id", count: 1 } }
+    ]);
+    return data;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const quickRideHistoryForAdmin=async()=>{
+  try {
+    return await QuickRide.find({status:'Ended'})
+  } catch (error) {
+    throw new Error((error as Error).message)
+  }
+}

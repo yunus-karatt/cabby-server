@@ -191,8 +191,14 @@ export default {
     try {
       const quickRideData=await quickRideHistoryForDriver(driverId)
       const scheduledRideData=await getScheduledRide.getScheduledRideHistoryForDriver(driverId)
-      console.log([...quickRideData,...scheduledRideData])
       return [...quickRideData,...scheduledRideData]
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  isOnline:async(id:string)=>{
+    try {
+      return await getDriver.isDriverOnline(id)
     } catch (error) {
       throw new Error((error as Error).message)
     }

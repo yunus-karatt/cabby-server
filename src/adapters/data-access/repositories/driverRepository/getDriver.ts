@@ -161,5 +161,28 @@ export const getDriver = {
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  getRidingDriversCount:async()=>{
+    try {
+      return await Driver.find({isRiding:true}).countDocuments()
+    } catch (error) {
+      throw new Error((error as  Error).message)
+    }
+  },
+  getAvailableDriversCount:async()=>{
+    try {
+      return await Driver.find({isAvailable:true,isRiding:false}).countDocuments()
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  },
+  isDriverOnline:async(id:string)=>{
+    try {
+      const isAvailable= await Driver.findOne({_id:id,isAvailable:true},{_id:0,isAvailable:1})
+      return isAvailable
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
+  
 };

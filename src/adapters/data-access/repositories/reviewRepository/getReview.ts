@@ -7,5 +7,12 @@ export default {
     } catch (error) {
       throw new Error((error as Error).message)
     }
+  },
+  getAllreview:async()=>{
+    try {
+      return await Review.find().populate('userId').populate('driverId')
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
   }
 }
